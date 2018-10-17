@@ -2,7 +2,6 @@ package com.example.demo.web.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +16,10 @@ public class DatasourceConfiguration {
     @Primary
     @ConfigurationProperties(prefix = "spring.datasource")
     public DataSource ehubDataSource() {
-        return DataSourceBuilder.create().build();
+        org.apache.tomcat.jdbc.pool.DataSource dataSource = new org.apache.tomcat.jdbc.pool.DataSource();
+        dataSource.setTestOnBorrow(true);
+        dataSource.setValidationQuery("select 1");
+        return dataSource;
     }
 
     @Bean(name = "jdbcTemplate")
